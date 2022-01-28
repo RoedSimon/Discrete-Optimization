@@ -11,7 +11,7 @@ import random
 
 #%%
 
-customers_test = create_customers(50)
+customers_test = create_customers(10)
 
 distance_matrix_test = create_distance_matrix(customers_test)
 
@@ -42,7 +42,7 @@ print(solution_test_tabu)
 print(solution_distance(solution_test_tabu, distance_matrix_test))
 
 
-plot_solution(solution_test_tabu, distance_matrix_test, add_names=True, show_route=True)
+plot_solution(solution_test_two_opt, distance_matrix_test, add_names=True, show_route=True)
 
 #%%
 customers_test = create_customers(30)

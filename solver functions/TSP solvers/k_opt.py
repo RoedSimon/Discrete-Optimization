@@ -1,22 +1,11 @@
-from utility_tsp import solution_distance
+from utility_tsp import solution_distance, plot_solution
 from nearest_neighbor import nearest_neighbor
 from numpy import argmin
 
 
-
-def two_opt_swap(route, i, j, distance_matrix):
-
-    customers = len(route)
-    best_tour = route
-    best_distance = solution_distance(route)
-
-    return best_tour
-
-
-
 def two_opt(route, distance_matrix, iteration_limit = None):
 
-    route = nearest_neighbor(route)
+    #route = nearest_neighbor(route)
     customers = len(route)
     best_tour = route
     improved = True
@@ -32,7 +21,9 @@ def two_opt(route, distance_matrix, iteration_limit = None):
                 iterations += 1
                 if solution_distance(new_route, distance_matrix) < solution_distance(best_tour, distance_matrix):
                     best_tour = new_route
+                    plot_solution(best_tour, distance_matrix)
                     improved = True
+                    
 
         route = best_tour
     #print('Two-Opt iterations: ', iterations)

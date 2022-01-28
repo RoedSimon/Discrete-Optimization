@@ -103,14 +103,15 @@ def plot_solution(solution, distance_matrix, add_names=False, show_route=True):
             plt.text(x[i]+0.2, y[i]+0.3, name)
     
     if show_route:
-        solution.append(solution[0])
+        plot_solution = solution.copy()
+        plot_solution.append(plot_solution[0])
         for i in range(n_cust):
 
-            first_cust = solution[i]
+            first_cust = plot_solution[i]
             if i == n_cust:
-                second_cust = solution[0]
+                second_cust = plot_solution[0]
             else:
-                second_cust = solution[i+1]
+                second_cust = plot_solution[i+1]
 
             x1, x2 = first_cust.get_longitude(), second_cust.get_longitude()
             y1, y2 = first_cust.get_latitude(), second_cust.get_latitude()
