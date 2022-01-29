@@ -41,7 +41,6 @@ def create_customers(n):
     for i in range(n):
         new_customer = Customer(i, f"Cust_{i}", round(random.uniform(1, 100), 2), round(random.uniform(1, 100), 2))
         customers.append(new_customer)
-
     return customers
 
 
@@ -69,7 +68,7 @@ def solution_distance(solution, distance_matrix):
             total_distance += distance_matrix[cust.get_id(), solution[0].get_id()]
         else:
             total_distance += distance_matrix[cust.get_id(), solution[i+1].get_id()]
-
+            
     return round(total_distance, 2)
 
 
