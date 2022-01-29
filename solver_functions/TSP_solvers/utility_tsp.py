@@ -121,6 +121,7 @@ def plot_solution(solution, distance_matrix, add_names=False, show_route=True):
 
 def plot_solution_or(solution, distance_matrix, add_names=False, show_route=True):
     
+    fig = plt.figure()
     route_distance = solution_distance(solution, distance_matrix)
     n_cust = len(solution)
     names = []
@@ -161,4 +162,4 @@ def plot_solution_or(solution, distance_matrix, add_names=False, show_route=True
             y1, y2 = first_cust.get_latitude(), second_cust.get_latitude()
             plt.plot([x1,x2],[y1,y2],'k-')
 
-    return plt.show(); 
+    return fig; 
