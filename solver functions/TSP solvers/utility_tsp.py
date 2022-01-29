@@ -117,3 +117,48 @@ def plot_solution(solution, distance_matrix, add_names=False, show_route=True):
             plt.plot([x1,x2],[y1,y2],'k-')
 
     return plt.show(); 
+
+
+def plot_solution_or(solution, distance_matrix, add_names=False, show_route=True):
+    
+    route_distance = solution_distance(solution, distance_matrix)
+    n_cust = len(solution)
+    names = []
+    x = []
+    y = []
+
+    for cust in solution:
+        names.append(cust.get_id())
+        x.append(cust.get_longitude())
+        y.append(cust.get_latitude())
+    
+    
+    plt.plot(x, y, 'ko', markersize = 3)
+    plt.suptitle('Travelling Salesman Tour', fontweight="bold")
+    plt.title(f'Customers: {n_cust} - Distance: {route_distance}')
+    #plt.title(f'Travelling Salesman Tour\n Customers: {n_cust} - Distance: {route_distance}')
+
+    plt.axis([0, 100, 0, 100])
+    ax = plt.gca()
+    ax.set_autoscale_on(False)
+
+    if add_names:
+        for i, name in enumerate (names):
+            plt.text(x[i]+0.2, y[i]+0.3, name)
+    
+    if show_route:
+        plot_solution = solution.copy()
+        plot_solution.append(plot_solution[0])
+        for i in range(n_cust):
+
+            first_cust = plot_solution[i]
+            if i == n_cust:
+                second_cust = plot_solution[0]
+            else:
+                second_cust = plot_solution[i+1]
+
+            x1, x2 = first_cust.get_longitude(), second_cust.get_longitude()
+            y1, y2 = first_cust.get_latitude(), second_cust.get_latitude()
+            plt.plot([x1,x2],[y1,y2],'k-')
+
+    return plt.show(); 

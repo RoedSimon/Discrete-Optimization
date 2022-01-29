@@ -63,7 +63,6 @@ def or_tools_tsp_solver(customers, distance_matrix, vehicles=1, start_id=0, firs
 
     solution_cust_list = get_solution_as_cust_list(customers, manager, routing, solution)
 
-
     return solution_cust_list
 
 
@@ -100,3 +99,5 @@ def get_solution_as_cust_list(customers, manager, routing, solution):
     return solution_cust_list
 
 
+def plot_or_tools_solution(customers, solution, routing, manager):
+    pass

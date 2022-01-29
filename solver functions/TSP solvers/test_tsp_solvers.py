@@ -1,24 +1,31 @@
 
 #%%
 from utility_tsp import *
-from nearest_neighbor import *
-from k_opt import *
 from or_tools_tsp import *
-from meta_heuristics_tsp import *
+from custom_solvers.nearest_neighbor import *
+from custom_solvers.k_opt import *
+from custom_solvers.meta_heuristics_tsp import *
+
 import math
 import random
 
 
 #%%
 
-customers_test = create_customers(10)
+customers_test = create_customers(30)
 
 distance_matrix_test = create_distance_matrix(customers_test)
 
+solution_test_or_tools = or_tools_tsp_solver(customers_test, distance_matrix_test, local_search_strategy='GUIDED_LOCAL_SEARCH', time_limit=5)
+plot_solution(solution_test_or_tools, distance_matrix_test, add_names=True, show_route=True)
+
+
+
+#%%
 #solution_test_nn = nearest_neighbor(customers_test)
 solution_test_two_opt = two_opt(customers_test, distance_matrix_test)
 solution_test_three_opt = three_opt(customers_test, distance_matrix_test)
-#solution_test_or_tools = or_tools_tsp_solver(customers_test, distance_matrix_test, local_search_strategy='GUIDED_LOCAL_SEARCH', time_limit=15)
+solution_test_or_tools = or_tools_tsp_solver(customers_test, distance_matrix_test, local_search_strategy='GUIDED_LOCAL_SEARCH', time_limit=5)
 solution_test_sa = simulated_annealing(customers_test, distance_matrix_test)
 solution_test_tabu = tabu_search(customers_test, distance_matrix_test, tabu_length=100, iterations=1000, n_neighbors=200)
 
