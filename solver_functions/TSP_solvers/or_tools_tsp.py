@@ -4,7 +4,7 @@ import numpy as np
 
 
 
-def or_tools_tsp_solver(customers, distance_matrix, vehicles=1, start_id=0, first_solution_strategy='AUTOMATIC', local_search_strategy='AUTOMATIC', time_limit=5, print_out_solution=False):
+def or_tools_tsp_solver(customers, distance_matrix, vehicles=1, start_id=0, first_solution_strategy='AUTOMATIC', local_search_strategy='AUTOMATIC', time_limit=5, log_search = False, print_out_solution=False):
 
     #Round distance matrix to integers
     distance_matrix = np.rint(distance_matrix).astype(int)
@@ -52,6 +52,9 @@ def or_tools_tsp_solver(customers, distance_matrix, vehicles=1, start_id=0, firs
     search_parameters = pywrapcp.DefaultRoutingSearchParameters()
     search_parameters.local_search_metaheuristic = local_search_strategies[local_search_strategy]
     search_parameters.time_limit.seconds = time_limit
+
+    if log_search:
+        search_parameters.log_search = True
 
     # Solve the problem.
     solution = routing.SolveWithParameters(search_parameters)
@@ -101,3 +104,5 @@ def get_solution_as_cust_list(customers, manager, routing, solution):
 
 def plot_or_tools_solution(customers, solution, routing, manager):
     pass
+
+
