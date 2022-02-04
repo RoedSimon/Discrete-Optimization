@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 from solver_functions.TSP_solvers.or_tools_tsp import *
 from solver_functions.TSP_solvers.utility_tsp import *
+import plotly.express as px
 
 
 ## Title and Header information ##
@@ -64,9 +65,11 @@ with col2:
 if st.sidebar.button('Compare Algorithms'):
     comparison = compare_algorithms(customers, distance_matrix, vehicles=1, start_id=0, time_limit=time_limit_slider)
     comparison = comparison.sort_values(by=['Distance'], ascending=True)
-    comparison = comparison.set_index('Algorithm')
+    #comparison = comparison.set_index('Algorithm')
 
+    fig_comp = px.bar(comparison, x='Algorithm', y='Distance')
+    #fig_comp.update_layout(width=800)
     #st.write(comparison)
-    st.bar_chart(comparison, height=500)
+    st.plotly_chart(fig_comp, use_container_width=True)
 
 
