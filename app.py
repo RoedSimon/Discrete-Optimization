@@ -23,7 +23,11 @@ st.sidebar.markdown("## Select Algoritm and Settings")
 algorithm_selected = st.sidebar.selectbox("Choose an Algoritm", 
 ['AUTOMATIC', 'GREEDY_DESCENT', 'GUIDED_LOCAL_SEARCH', 'SIMULATED_ANNEALING', 'TABU_SEARCH'])
 
+
 time_limit_slider = st.sidebar.slider("Max time to solve problem (seconds)", min_value=1, max_value=10, value=1)
+
+st.sidebar.markdown("## Compare Algorithms")
+#st.sidebar.button('Compare Algorithms')
 
 ## Create Data and Customer Plot ##
 
@@ -57,6 +61,12 @@ with col2:
     st.pyplot(solution_plot)
 
 
-if
+if st.sidebar.button('Compare Algorithms'):
+    comparison = compare_algorithms(customers, distance_matrix, vehicles=1, start_id=0, time_limit=time_limit_slider)
+    comparison = comparison.sort_values(by=['Distance'], ascending=True)
+    comparison = comparison.set_index('Algorithm')
+
+    #st.write(comparison)
+    st.bar_chart(comparison, height=500)
 
 

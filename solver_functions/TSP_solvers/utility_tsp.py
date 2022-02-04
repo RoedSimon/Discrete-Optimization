@@ -3,6 +3,7 @@ import random
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
+import streamlit as st
 
 class Customer:
 
@@ -35,7 +36,7 @@ class Customer:
 
 
 
-
+@st.cache
 def create_customers(n):
     customers = []
     for i in range(n):

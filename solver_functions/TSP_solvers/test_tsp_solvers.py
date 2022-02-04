@@ -12,6 +12,15 @@ import random
 
 #%%
 
+
+test_dict = {'algos': ['one', 'two'], 'distance': [1, 2]}
+
+
+df_test = pd.DataFrame(test_dict)
+
+
+#%%
+
 customers_test = create_customers(30)
 
 distance_matrix_test = create_distance_matrix(customers_test)

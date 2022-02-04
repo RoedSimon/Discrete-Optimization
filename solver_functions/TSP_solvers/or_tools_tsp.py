@@ -1,6 +1,9 @@
 from ortools.constraint_solver import routing_enums_pb2
 from ortools.constraint_solver import pywrapcp
+from solver_functions.TSP_solvers.utility_tsp import *
+#from utility_tsp import solution_distance
 import numpy as np
+import pandas as pd
 
 
 
@@ -106,3 +109,18 @@ def plot_or_tools_solution(customers, solution, routing, manager):
     pass
 
 
+def compare_algorithms(customers, distance_matrix, vehicles=1, start_id=0, time_limit=5):
+
+    algorithms = local_search_strategies = ['AUTOMATIC', 'GREEDY_DESCENT', 'GUIDED_LOCAL_SEARCH', 'SIMULATED_ANNEALING','TABU_SEARCH']
+    distances = []
+
+
+    for algo in algorithms:
+
+        solution = or_tools_tsp_solver(customers, distance_matrix, local_search_strategy=algo, time_limit=time_limit)
+        solution_distance_algo = solution_distance(solution, distance_matrix)
+        distances.append(solution_distance_algo)
+
+    results = {'Algorithm': algorithms, 'Distance': distances}
+
+    return pd.DataFrame(results)
