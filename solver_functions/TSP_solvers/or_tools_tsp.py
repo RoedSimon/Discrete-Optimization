@@ -146,7 +146,7 @@ class TSP_Problem:
 
     def plot_customers(self, add_names=False):
 
-        n_cust = len(self.solution)
+        n_cust = len(self.solution)-1
         names = []
         x = []
         y = []
