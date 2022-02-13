@@ -2,24 +2,12 @@
 #%%
 from utility_tsp import *
 from or_tools_tsp import *
-#from custom_solvers.nearest_neighbor import *
-from custom_solvers.k_opt import *
-from custom_solvers.meta_heuristics_tsp import *
 
 import math
 import random
 
 
-#%%
 
-
-test_dict = {'algos': ['one', 'two'], 'distance': [1, 2]}
-
-
-df_test = pd.DataFrame(test_dict)
-
-
-#%%
 
 customers_test = create_customers(30)
 

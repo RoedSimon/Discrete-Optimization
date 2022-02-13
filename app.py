@@ -1,10 +1,6 @@
 
 import streamlit as st
-import pandas as pd
-import numpy as np
-from solver_functions.TSP_solvers.or_tools_tsp import *
-from solver_functions.TSP_solvers.utility_tsp import *
-import plotly.express as px
+from solver_functions.TSP_solvers.or_tools_tsp import TSP_Problem
 
 
 ## Title and Header information ##
@@ -22,54 +18,30 @@ number_of_customers = st.sidebar.slider("Number of Customer Location to Visit", 
 
 st.sidebar.markdown("## Select Algoritm and Settings")
 algorithm_selected = st.sidebar.selectbox("Choose an Algoritm", 
-['AUTOMATIC', 'GREEDY_DESCENT', 'GUIDED_LOCAL_SEARCH', 'SIMULATED_ANNEALING', 'TABU_SEARCH'])
+['GREEDY_DESCENT', 'GUIDED_LOCAL_SEARCH', 'SIMULATED_ANNEALING', 'TABU_SEARCH'])
 
 
 time_limit_slider = st.sidebar.slider("Max time to solve problem (seconds)", min_value=1, max_value=10, value=1)
 
-st.sidebar.markdown("## Compare Algorithms")
-#st.sidebar.button('Compare Algorithms')
 
 ## Create Data and Customer Plot ##
 
-customers = create_customers(number_of_customers)
-distance_matrix = create_distance_matrix(customers)
-customers_plot = plot_solution_or(customers, distance_matrix, show_route=False)
+tsp_problem = TSP_Problem(number_of_customers)
+tsp_problem.solve_problem(local_search_strategy=algorithm_selected, time_limit=time_limit_slider)
 
 
 ## Set Page Layout ##
 
 col1, col2 = st.columns(2)
 
-# Solve Problem and generate plot
-
- 
-solution = or_tools_tsp_solver(customers, distance_matrix, vehicles=1, start_id=0, first_solution_strategy='AUTOMATIC',
-                                        local_search_strategy=algorithm_selected, time_limit=time_limit_slider)
-
-solution_plot = plot_solution_or(solution, distance_matrix)
-
 
 # Show plots
 
 with col1:
-        st.header('Customers To Visit')
-        st.pyplot(customers_plot)
+    st.pyplot(tsp_problem.plot_customers())
 
 
 with col2:
-    st.header('Optimized Solution')
-    st.pyplot(solution_plot)
-
-
-if st.sidebar.button('Compare Algorithms'):
-    comparison = compare_algorithms(customers, distance_matrix, vehicles=1, start_id=0, time_limit=time_limit_slider)
-    comparison = comparison.sort_values(by=['Distance'], ascending=True)
-    #comparison = comparison.set_index('Algorithm')
-
-    fig_comp = px.bar(comparison, x='Algorithm', y='Distance')
-    #fig_comp.update_layout(width=800)
-    #st.write(comparison)
-    st.plotly_chart(fig_comp, use_container_width=True)
+    st.pyplot(tsp_problem.plot_solution(algorithm_selected))
 
 

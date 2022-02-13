@@ -77,6 +77,7 @@ def solution_distance(solution, distance_matrix):
 
 def plot_solution(solution, distance_matrix, add_names=False, show_route=True):
     
+
     route_distance = solution_distance(solution, distance_matrix)
     n_cust = len(solution)
     names = []
@@ -122,7 +123,9 @@ def plot_solution(solution, distance_matrix, add_names=False, show_route=True):
 
 def plot_solution_or(solution, distance_matrix, add_names=False, show_route=True):
     
+
     fig = plt.figure()
+    #fig.set_facecolor("#f0f2f6")
     route_distance = solution_distance(solution, distance_matrix)
     n_cust = len(solution)
     names = []
@@ -133,21 +136,7 @@ def plot_solution_or(solution, distance_matrix, add_names=False, show_route=True
         names.append(cust.get_id())
         x.append(cust.get_longitude())
         y.append(cust.get_latitude())
-    
-    
-    plt.plot(x, y, 'ko', markersize = 3)
-    plt.suptitle('Travelling Salesman Tour', fontweight="bold")
-    plt.title(f'Customers: {n_cust} - Distance: {route_distance}')
-    #plt.title(f'Travelling Salesman Tour\n Customers: {n_cust} - Distance: {route_distance}')
 
-    plt.axis([0, 100, 0, 100])
-    ax = plt.gca()
-    ax.set_autoscale_on(False)
-
-    if add_names:
-        for i, name in enumerate (names):
-            plt.text(x[i]+0.2, y[i]+0.3, name)
-    
     if show_route:
         plot_solution = solution.copy()
         plot_solution.append(plot_solution[0])
@@ -161,6 +150,24 @@ def plot_solution_or(solution, distance_matrix, add_names=False, show_route=True
 
             x1, x2 = first_cust.get_longitude(), second_cust.get_longitude()
             y1, y2 = first_cust.get_latitude(), second_cust.get_latitude()
-            plt.plot([x1,x2],[y1,y2],'k-')
+            plt.plot([x1,x2],[y1,y2], color="darkgreen")
+    
+    
+    plt.plot(x, y, marker='o', linestyle='None', color='darkslategray', markersize = 5)
+    plt.suptitle('Travelling Salesman Tour', fontweight="bold")
+    plt.title(f'Customers: {n_cust} - Distance: {route_distance}')
+    #plt.title(f'Travelling Salesman Tour\n Customers: {n_cust} - Distance: {route_distance}')
+
+    plt.axis([0, 105, 0, 105])
+    ax = plt.gca()
+    ax.set_autoscale_on(False)
+    ax.axes.xaxis.set_visible(False)
+    ax.axes.yaxis.set_visible(False)
+    #ax.set_facecolor("#f0f2f6")
+    #ax.axis("off")
+
+    if add_names:
+        for i, name in enumerate (names):
+            plt.text(x[i]+0.2, y[i]+0.3, name)
 
     return fig; 

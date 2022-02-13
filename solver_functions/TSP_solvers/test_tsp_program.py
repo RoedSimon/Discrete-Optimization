@@ -1,21 +1,19 @@
 
 #%%
-from utility_tsp import *
-from or_tools_tsp import *
+
+from or_tools_tsp import TSP_Problem
 
 
-customers_test = create_customers(80)
+TSP = TSP_Problem(20)
 
-distance_matrix_test = create_distance_matrix(customers_test)
+#TSP.initialize_problem(20)
 
-#solution_test_or_tools = or_tools_tsp_solver(customers_test, distance_matrix_test, local_search_strategy='GUIDED_LOCAL_SEARCH', time_limit=5, log_search=True)
-#figure = plot_solution_or(solution_test_or_tools, distance_matrix_test, add_names=True, show_route=True)
-#figure.show()
-#figure.savefig('test.png')
-#print('Done')
+TSP.customers
+TSP.distance_matrix
 
+TSP.solve_problem()
 
-comparision = compare_algorithms(customers_test, distance_matrix_test, time_limit=2)
+TSP.plot_customers()
+TSP.plot_solution()
 
-print(comparision)
-
+# %%
