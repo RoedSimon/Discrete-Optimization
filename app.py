@@ -5,16 +5,18 @@ from solver_functions.TSP_solvers.or_tools_tsp import TSP_Problem
 
 ## Title and Header information ##
 
-st.set_page_config(layout="wide")
+st.set_page_config(page_title='Traveling Salesman Problem', layout='wide')
 
 st.title('Travelling Salesman Problem')
 
-st.markdown("### Description text here")
+st.markdown('###### *The travelling salesman problem asks the following question: "Given a list of cities and the distances between each pair of cities, what is the shortest possible route that visits each city exactly once and returns to the origin city?"*')
 
 ## Sidebar Selection Panel ##
 
+st.sidebar.markdown('*Adjust the settings to set the problem size and algorithm*')
+
 st.sidebar.markdown("## Select Number of Customers")
-number_of_customers = st.sidebar.slider("Number of Customer Location to Visit", min_value=50, max_value=200)
+number_of_customers = st.sidebar.slider("Number of Customer Location to Visit", min_value=50, max_value=250)
 
 st.sidebar.markdown("## Select Algoritm and Settings")
 algorithm_selected = st.sidebar.selectbox("Choose an Algoritm", 
