@@ -24,7 +24,7 @@ algorithm_selected = st.sidebar.selectbox("Choose an Algoritm",
 time_limit_slider = st.sidebar.slider("Max time to solve problem (seconds)", min_value=1, max_value=10, value=1)
 
 
-## Create Data and Customer Plot ##
+## Create TSP_Problem instance and solve it ##
 
 tsp_problem = TSP_Problem(number_of_customers)
 tsp_problem.solve_problem(local_search_strategy=algorithm_selected, time_limit=time_limit_slider)
