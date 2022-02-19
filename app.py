@@ -1,7 +1,7 @@
 
 import streamlit as st
-from solver_functions.solvers.or_tools_tsp import TSP_Problem
-from solver_functions.solvers.or_tools_vrp import VRP_Problem
+from solvers.or_tools_tsp import TSP_Problem
+from solvers.or_tools_vrp import VRP_Problem
 
 st.set_page_config(page_title='Discrete Optimization App', layout='wide')
 
