@@ -37,7 +37,7 @@ class Location:
 
 
 
-
+@st.cache(allow_output_mutation=True)
 class VRP_Problem:
 
     def __init__(self, n_customers):
