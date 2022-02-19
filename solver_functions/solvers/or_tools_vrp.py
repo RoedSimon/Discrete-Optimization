@@ -42,11 +42,11 @@ class VRP_Problem:
 
     def __init__(self, n_customers):
 
-        self.depot = None
-        self.customers = []
+        self.locations = []
         self.distance_matrix = []
         self.solution = []
         self.solution_distance = None
+        self.max_vehicle_distance = None
         
         self.initialize_problem(n_customers)
 
@@ -67,26 +67,19 @@ class VRP_Problem:
         return self.solution_distance
     
     def initialize_problem(self, n_customers):
-        
-        # Generate Depot
 
-        depot = Location(0, "Depot", round(random.uniform(1, 100), 2), round(random.uniform(1, 100), 2))
-
-        self.depot = depot
-        
-        # Generate Customers
-        customers = []
+        # Generate Depot and Customers
+        locations = []
+        locations.append(Location(0, "Depot", round(random.uniform(1, 100), 2), round(random.uniform(1, 100), 2)))
         for i in range(n_customers):
-            new_customer = Location(i + 1, f"Cust_{i}", round(random.uniform(1, 100), 2), round(random.uniform(1, 100), 2))
-            customers.append(new_customer)
-        
-        self.customers = customers
+            new_customer = Location(i+1, f"Cust_{i+1}", round(random.uniform(1, 100), 2), round(random.uniform(1, 100), 2))
+            locations.append(new_customer)
+
+        self.locations = locations
 
         # Generate distance Matrix
 
-        locations = [depot].extend(customers)
-
-        distance_matrix = np.zeros((locations, locations))
+        distance_matrix = np.zeros((n_customers+1, n_customers+1))
 
         for i, location_from in enumerate(locations):
             for j, location_to in enumerate(locations):
@@ -98,7 +91,7 @@ class VRP_Problem:
         self.distance_matrix = distance_matrix
 
     
-    def solve_problem(self, local_search_strategy='AUTOMATIC', num_vehicles=3, vehicle_max_distance=300, time_limit=5, log_search = False):
+    def solve_problem(self, local_search_strategy='AUTOMATIC', num_vehicles=3, vehicle_max_distance=10000, time_limit=5, span_cost_coef=100, log_search = False):
 
         # Create the routing index manager
         manager = pywrapcp.RoutingIndexManager(len(self.distance_matrix), num_vehicles, 0)
@@ -127,7 +120,7 @@ class VRP_Problem:
             True,  # start cumul to zero
             dimension_name)
         distance_dimension = routing.GetDimensionOrDie(dimension_name)
-        distance_dimension.SetGlobalSpanCostCoefficient(100)
+        distance_dimension.SetGlobalSpanCostCoefficient(span_cost_coef)
 
         #Define possible possible search strategies
         local_search_strategies = {
@@ -153,45 +146,49 @@ class VRP_Problem:
 
         # Get solution as list
 
-        index = routing.Start(0)
-        route = [manager.IndexToNode(index)]
-        while not routing.IsEnd(index):
-            index = solution.Value(routing.NextVar(index))
-            route.append(manager.IndexToNode(index))
-
         routes = []
+        route_distances = []
         for route_nbr in range(routing.vehicles()):
+            route_distance = 0
             index = routing.Start(route_nbr)
             route = [manager.IndexToNode(index)]
             while not routing.IsEnd(index):
+                previous_index = index
                 index = solution.Value(routing.NextVar(index))
+                route_distance += routing.GetArcCostForVehicle(previous_index, index, route_nbr)
                 route.append(manager.IndexToNode(index))
             routes.append(route)
+            route_distances.append(route_distance)
+
+        
+
 
         # Assign values to Class attributes
 
         self.solution = routes
-        self.solution_distance = solution.ObjectiveValue()
+        self.max_vehicle_distance = max(route_distances)
+        self.solution_distance = sum(route_distances)
 
 
 
-    def plot_customers(self, add_names=False):
+    def plot_customers_and_depot(self, add_names=False):
 
-        n_cust = len(self.solution)-1
+        n_locations = len(self.locations)
         names = []
         x = []
         y = []
 
-        for cust in self.solution:
-            names.append(self.customers[cust].get_id())
-            x.append(self.customers[cust].get_longitude())
-            y.append(self.customers[cust].get_latitude())
+        for i in range(len(self.locations)):
+            names.append(self.locations[i].get_id())
+            x.append(self.locations[i].get_longitude())
+            y.append(self.locations[i].get_latitude())
 
 
         fig = plt.figure()
-        plt.plot(x, y, marker='o', linestyle='None', color='darkslategray', markersize = 5)
-        plt.suptitle('Customers to Visit', fontweight="bold")
-        plt.title(f'Number of Customers: {n_cust}')
+        plt.plot(x[0], y[0], marker='s', linestyle='None', color='black', markersize=7)
+        plt.plot(x[1:], y[1:], marker='o', linestyle='None', color='darkslategray', markersize=5)
+        plt.suptitle('Depot and Customers to Visit', fontweight="bold")
+        plt.title(f'Number of Customers: {n_locations-1}')
 
         plt.axis([0, 105, 0, 105])
         ax = plt.gca()
@@ -208,32 +205,38 @@ class VRP_Problem:
 
     def plot_solution(self, algorithm = None, add_names=False):
 
-        n_cust = len(self.solution)
+        colors = ['darkgreen', 'maroon', 'darkgoldenrod', 'royalblue', 'indigo', 'purple', 'grey', 'yellow', 'skyblue', 'lime']
+
         names = []
         x = []
         y = []
         algorithm = algorithm.replace('_', ' ').title()
 
-        for cust in self.solution:
-            names.append(self.customers[cust].get_id())
-            x.append(self.customers[cust].get_longitude())
-            y.append(self.customers[cust].get_latitude())
+        for i in range(len(self.locations)):
+            names.append(self.locations[i].get_id())
+            x.append(self.locations[i].get_longitude())
+            y.append(self.locations[i].get_latitude())
 
 
         fig = plt.figure()
-
-        for i in range(n_cust - 1):
-
-            first_cust = self.customers[self.solution[i]]
-            second_cust = self.customers[self.solution[i+1]]
-
-            x1, x2 = first_cust.get_longitude(), second_cust.get_longitude()
-            y1, y2 = first_cust.get_latitude(), second_cust.get_latitude()
-            plt.plot([x1,x2],[y1,y2], color="darkgreen")
-
-        plt.plot(x, y, marker='o', linestyle='None', color='darkslategray', markersize = 5)
+        plt.plot(x[0], y[0], marker='s', linestyle='None', color='black', markersize=7)
+        plt.plot(x[1:], y[1:], marker='o', linestyle='None', color='darkslategray', markersize=5)
         plt.suptitle(f'Solution found by: {algorithm}', fontweight="bold")
-        plt.title(f'Distance: {self.solution_distance}km')
+        plt.title(f'Total Distance: {self.solution_distance}km - Max Vehicle Distance: {self.max_vehicle_distance}')
+
+        for i, route in enumerate(self.solution):
+            
+            for j in range(len(route) - 1):
+                first_cust_index = route[j]
+                second_cust_index = route[j+1]
+                first_cust = self.locations[first_cust_index]
+                second_cust = self.locations[second_cust_index]
+
+                x1, x2 = first_cust.get_longitude(), second_cust.get_longitude()
+                y1, y2 = first_cust.get_latitude(), second_cust.get_latitude()
+                plt.plot([x1,x2],[y1,y2], color=colors[i])
+
+
 
         plt.axis([0, 105, 0, 105])
         ax = plt.gca()
