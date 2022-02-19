@@ -38,7 +38,7 @@ class Customer:
         return distance_rounded
 
 
-
+@st.cache(allow_output_mutation=True)
 class TSP_Problem:
 
     def __init__(self, n_customers):
@@ -162,7 +162,7 @@ class TSP_Problem:
         plt.suptitle('Customers to Visit', fontweight="bold")
         plt.title(f'Number of Customers: {n_cust}')
 
-        plt.axis([0, 105, 0, 105])
+        plt.axis([-5, 105, -5, 105])
         ax = plt.gca()
         ax.set_autoscale_on(False)
         ax.axes.xaxis.set_visible(False)
