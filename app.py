@@ -68,7 +68,7 @@ elif app_navigation == 'Vehicle Routing Problem':
     st.sidebar.markdown('')
 
     st.sidebar.markdown("## Select Number of Customers")
-    number_of_customers = st.sidebar.slider("Number of Customer Location to Visit", min_value=50, max_value=150, value=50)
+    number_of_customers = st.sidebar.slider("Number of Customer Location to Visit", min_value=25, max_value=75, value=50)
 
     st.sidebar.markdown("## Select Number of Vehicles")
     number_of_vehicles = st.sidebar.slider("Number of Vehicles", min_value=2, max_value=5, value=2)
